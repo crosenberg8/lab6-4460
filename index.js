@@ -26,8 +26,8 @@ d3.csv('transportData.csv').then(function (data) {
 
     // create y-scale
     var yscale = d3.scaleLinear()
-    .domain([0, 36000])
-    .range([height/2 + 100, 0]);
+        .domain([0, 55000])
+        .range([height/2 + 100, 0]);
 
     // create y-axis
     var x_axis = d3.axisBottom()
@@ -61,5 +61,133 @@ d3.csv('transportData.csv').then(function (data) {
         .selectAll('text')
         .attr('transform', 'translate(-10, 0)rotate(-45)')
         .style('text-anchor', 'end');
+
+    // Add the y-axis label
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 20)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Number of Fatalities");
+
+    var year = data.map(function (row) {
+        return row.Year;
+    });
+
+    var carOccupant = data.map(function (row) {
+        return row.Car_Occupant;
+    });
+
+    var pedestrian = data.map(function(row) {
+        return row.Pedestrian;
+    })
+
+    var motorcycle = data.map(function(row) {
+        return row.Motorcycle;
+    })
+
+    var bicycle = data.map(function(row) {
+        return row.Bicycle;
+    })
+
+    var trucks = data.map(function(row) {
+        return row.Trucks;
+    })
+
+    var total = data.map(function(row) {
+        return row.Total;
+    })
+   
+
+    var line = d3.line()
+        .x(function (d, i) {
+            return xscale(year[i]) + 100;
+        })
+        .y(function (d, i) {
+            return yscale(carOccupant[i]) + 150;
+        });
+
+    var line2 = d3.line()
+        .x(function (d, i) {
+            return xscale(year[i]) + 100;
+        })
+        .y(function (d, i) {
+            return yscale(pedestrian[i]) + 150;
+        });
+
+    var line3 = d3.line()
+        .x(function (d, i) {
+            return xscale(year[i]) + 100;
+        })
+        .y(function (d, i) {
+            return yscale(motorcycle[i]) + 150;
+        });
+
+    var line4 = d3.line()
+        .x(function (d, i) {
+            return xscale(year[i]) + 100;
+        })
+        .y(function (d, i) {
+            return yscale(bicycle[i]) + 150;
+        });
+
+    var line5 = d3.line()
+        .x(function (d, i) {
+            return xscale(year[i]) + 100;
+        })
+        .y(function (d, i) {
+            return yscale(trucks[i]) + 150;
+        });
+
+    var line6 = d3.line()
+        .x(function (d, i) {
+            return xscale(year[i]) + 100;
+        })
+        .y(function (d, i) {
+            return yscale(total[i]) + 150;
+        });
+
+
+    svg.append('path')
+        .attr('d', line(carOccupant))
+        .attr('stroke', 'red')
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');
+
+    svg.append('path')
+        .attr('d', line2(pedestrian))
+        .attr('stroke', 'blue')
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');
+
+    svg.append('path')
+        .attr('d', line3(motorcycle))
+        .attr('stroke', 'green')
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');
+
+    svg.append('path')
+        .attr('d', line4(bicycle))
+        .attr('stroke', 'magenta')
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');
+
+    svg.append('path')
+        .attr('d', line5(trucks))
+        .attr('stroke', 'orange')
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');
+
+    svg.append('path')
+        .attr('d', line6(total))
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');   
+
+
+
+
+
 
 });
