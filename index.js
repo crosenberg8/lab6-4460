@@ -3,8 +3,13 @@ d3.csv('transportData.csv').then(function (data) {
     1. Get the data into a varaible
     2. Get the years of the data
     3. Get the max and min number of fatalities
-
     */
+    
+   
+
+   //select svg
+   var svg = d3.select('svg')
+
    // height and width
    var height = 700;
    var width = 1300;
@@ -14,21 +19,21 @@ d3.csv('transportData.csv').then(function (data) {
         return row.Year;
     });
 
-    //create x-scale
+    // create x-scale
     var xscale = d3.scaleBand()
         .domain(years)
         .range([0, width - 300]);
 
-    //create y-scale
+    // create y-scale
     var yscale = d3.scaleLinear()
     .domain([0, 36000])
     .range([height/2 + 100, 0]);
 
-    //create y-axis
+    // create y-axis
     var x_axis = d3.axisBottom()
         .scale(xscale);
 
-    //create y-axis
+    // create y-axis
     var y_axis = d3.axisLeft()
         .scale(yscale);
 
@@ -44,7 +49,17 @@ d3.csv('transportData.csv').then(function (data) {
         .attr('transform', 'translate(100, 150)')
         .call(y_axis);
     
-    d3.selectAll('text')
+    // x-axis label
+    svg.append("text")      // text label for the x axis
+        .attr("x", width/2)
+        .attr("y", height - 50)
+        .style("text-anchor", "middle")
+        .text("Year");
+
+    //rotate text
+    d3.selectAll('g')
+        .selectAll('text')
         .attr('transform', 'translate(-10, 0)rotate(-45)')
         .style('text-anchor', 'end');
+
 });
