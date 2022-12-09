@@ -12,7 +12,7 @@ d3.csv('transportData.csv').then(function (data) {
 
    // height and width
    var height = 700;
-   var width = 1300;
+   var width = 1200;
 
    // Get the data from the row titles "Year"
     var years = data.map(function (row) {
@@ -22,7 +22,7 @@ d3.csv('transportData.csv').then(function (data) {
     // create x-scale
     var xscale = d3.scaleBand()
         .domain(years)
-        .range([0, width - 300]);
+        .range([0, width - 150]);
 
     // create y-scale
     var yscale = d3.scaleLinear()
