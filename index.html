@@ -4,9 +4,9 @@
 <body>
     <div id="main">
         <h3>Connor & Sharon's Lab 6 Visualization</h3>
-        <svg width="1200" height="700" style="border: 1px solid #777;" id="chart1">
-
-        </svg>
+        <h4 id="filter-view">Select a filter</h4>
+        <svg width="1200" height="700" style="border: 1px solid #777;" id="chart1"></svg>
+        <div id="legend">
             <div class="checkbox">
                 <input type="checkbox" id="Total" name="Total" value="Total">
                 <label for="Total"> Total </label><br>
@@ -36,6 +36,20 @@
                 <input type="checkbox" id="Truck" name="Truck" value="Truck">
                 <label for="Truck"> Truck</label><br>
             </div>
+        </div>
+
+        <div id="legend-2">
+            <h4 id="data-view">Select a data view</h4>
+            <div class="radio-button">
+                <input type="radio" id="All" name="All" value="All">
+                <label for="All">Raw Data</label><br>
+            </div>
+            <div class="radio-button">
+                <input type="radio" id="All" name="All" value="All">
+                <label for="All">Trend Data</label><br>
+            </div>
+        </div>
+
     </div>
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>

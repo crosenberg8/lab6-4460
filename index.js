@@ -14,7 +14,15 @@ d3.csv('transportData.csv').then(function (data) {
    var height = 700;
    var width = 1200;
 
-   // Get the data from the row titles "Year"
+   // Title saying "Transportation Fatalities over Time"
+    svg.append('text')
+        .attr('x', width/2)
+        .attr('y', 50)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', '30px')
+        .text('Transportation Fatalities over Time');
+       
+    // get the years of the data
     var years = data.map(function (row) {
         return row.Year;
     });
@@ -50,7 +58,7 @@ d3.csv('transportData.csv').then(function (data) {
         .call(y_axis);
     
     // x-axis label
-    svg.append("text")      // text label for the x axis
+    svg.append("text")
         .attr("x", width/2)
         .attr("y", height - 50)
         .style("text-anchor", "middle")
@@ -98,49 +106,20 @@ d3.csv('transportData.csv').then(function (data) {
     var total = data.map(function(row) {
         return row.Total;
     })
-   
 
-    var line = d3.line()
-        .x(function (d, i) {
-            return xscale(year[i]) + 100;
-        })
-        .y(function (d, i) {
-            return yscale(carOccupant[i]) + 150;
-        });
+    /*
+    If boolean for trendline is selected (all this logic is within teh filters), then plot trendline. Else, plot the raw data.
 
-    var line2 = d3.line()
-        .x(function (d, i) {
-            return xscale(year[i]) + 100;
-        })
-        .y(function (d, i) {
-            return yscale(pedestrian[i]) + 150;
-        });
+    */
 
-    var line3 = d3.line()
-        .x(function (d, i) {
-            return xscale(year[i]) + 100;
-        })
-        .y(function (d, i) {
-            return yscale(motorcycle[i]) + 150;
-        });
 
-    var line4 = d3.line()
-        .x(function (d, i) {
-            return xscale(year[i]) + 100;
-        })
-        .y(function (d, i) {
-            return yscale(bicycle[i]) + 150;
-        });
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Total Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    d3.select('#total').on('change', function () {
+        this.checked ? displayTotal() : undisplayTotal();
+    });
 
-    var line5 = d3.line()
-        .x(function (d, i) {
-            return xscale(year[i]) + 100;
-        })
-        .y(function (d, i) {
-            return yscale(trucks[i]) + 150;
-        });
-
-    var line6 = d3.line()
+    function displayTotal() {
+        var line = d3.line()
         .x(function (d, i) {
             return xscale(year[i]) + 100;
         })
@@ -148,46 +127,149 @@ d3.csv('transportData.csv').then(function (data) {
             return yscale(total[i]) + 150;
         });
 
+        svg.append('path')
+        .attr('d', line(total))
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2)
+        .attr('fill', 'none')
+        .attr('class', 'total');  
+    }
+    
+    function undisplayTotal() {
+        d3.selectAll('.total').remove();
+    }
 
-    svg.append('path')
+    
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Car Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    d3.select('#car').on('change', function () {
+        this.checked ? displayCar() : undisplayCar();
+    });
+
+
+    function displayCar() {
+        var line = d3.line()
+        .x(function (d, i) {
+            return xscale(year[i]) + 100;
+        })
+        .y(function (d, i) {
+            return yscale(carOccupant[i]) + 150;
+        });
+
+        svg.append('path')
         .attr('d', line(carOccupant))
         .attr('stroke', 'red')
         .attr('stroke-width', 2)
-        .attr('fill', 'none');
+        .attr('fill', 'none')
+        .attr('class', 'car');
+    }
 
-    svg.append('path')
-        .attr('d', line2(pedestrian))
+    function undisplayCar() {
+        d3.selectAll('.car').remove();
+    }
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Pedestrian Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    d3.select('#pedestrian').on('change', function () {
+        this.checked ? displayPedestrian() : undisplayPedestrian();
+    });
+
+    function displayPedestrian() {
+        var line = d3.line()
+        .x(function (d, i) {
+            return xscale(year[i]) + 100;
+        })
+        .y(function (d, i) {
+            return yscale(pedestrian[i]) + 150;
+        });
+
+        svg.append('path')
+        .attr('d', line(pedestrian))
         .attr('stroke', 'blue')
         .attr('stroke-width', 2)
-        .attr('fill', 'none');
+        .attr('fill', 'none')
+        .attr('class', 'pedestrian');
+    }
 
-    svg.append('path')
-        .attr('d', line3(motorcycle))
+    function undisplayPedestrian() {
+        d3.selectAll('.pedestrian').remove();
+    }
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Motorcycle Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    d3.select('#motorcycle').on('change', function () {
+        this.checked ? displayMotorcycle() : undisplayMotorcycle();
+    });
+
+    function displayMotorcycle() {
+        var line = d3.line()
+        .x(function (d, i) {
+            return xscale(year[i]) + 100;
+        })
+        .y(function (d, i) {
+            return yscale(motorcycle[i]) + 150;
+        });
+
+        svg.append('path')
+        .attr('d', line(motorcycle))
         .attr('stroke', 'green')
         .attr('stroke-width', 2)
-        .attr('fill', 'none');
+        .attr('fill', 'none')
+        .attr('class', 'motorcycle');
+    }
 
-    svg.append('path')
-        .attr('d', line4(bicycle))
+    function undisplayMotorcycle() {
+        d3.selectAll('.motorcycle').remove();
+    }
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Bicycle Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    d3.select('#bicycle').on('change', function () {
+        this.checked ? displayBicycle() : undisplayBicycle();
+    });
+
+    function displayBicycle() {
+        var line = d3.line()
+        .x(function (d, i) {
+            return xscale(year[i]) + 100;
+        })
+        .y(function (d, i) {
+            return yscale(bicycle[i]) + 150;
+        });
+
+        svg.append('path')
+        .attr('d', line(bicycle))
         .attr('stroke', 'magenta')
         .attr('stroke-width', 2)
-        .attr('fill', 'none');
+        .attr('fill', 'none')
+        .attr('class', 'bicycle');
+    }
 
-    svg.append('path')
-        .attr('d', line5(trucks))
+    function undisplayBicycle() {
+        d3.selectAll('.bicycle').remove();
+    }
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Truck Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    d3.select('#truck').on('change', function () {
+        this.checked ? displayTruck() : undisplayTruck();
+    });
+
+    function displayTruck() {
+        var line = d3.line()
+        .x(function (d, i) {
+            return xscale(year[i]) + 100;
+        })
+        .y(function (d, i) {
+            return yscale(trucks[i]) + 150;
+        });
+
+        svg.append('path')
+        .attr('d', line(trucks))
         .attr('stroke', 'orange')
         .attr('stroke-width', 2)
-        .attr('fill', 'none');
-
-    svg.append('path')
-        .attr('d', line6(total))
-        .attr('stroke', 'black')
-        .attr('stroke-width', 2)
-        .attr('fill', 'none');   
-
-
-
-
-
+        .attr('fill', 'none')
+        .attr('class', 'truck');
+    }
+    
+    function undisplayTruck() {
+        d3.selectAll('.truck').remove();
+    }
 
 });
