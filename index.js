@@ -107,17 +107,86 @@ d3.csv('transportData.csv').then(function (data) {
         return row.Total;
     })
 
+    // check which radio button is selected
+    var rawSelected = true;
+    
+    d3.select('#Raw').on('change', function () {
+        if (this.checked) {
+            rawSelected = true; 
+            if (document.getElementById('Total').checked) {
+                undisplayTotalTrend();
+                displayTotal();
+            }
+            if (document.getElementById('Car').checked) {
+                undisplayCarTrend();
+                displayCar();
+            }
+            if (document.getElementById('Pedestrian').checked) {
+                undisplayPedTrend();
+                displayPedestrian();
+            }
+            if (document.getElementById('Motorcycle').checked) {
+                undisplayMotorTrend();
+                displayMotorcycle();
+            }
+            if (document.getElementById('Bicycle').checked) {
+                undisplayBicycleTrend();
+                displayBicycle();
+            }
+            if (document.getElementById('Truck').checked) {
+                undisplayTruckTrend();
+                displayTruck();
+            }
+        }
+    });
+
+    d3.select('#Trend').on('change', function () {
+        if (this.checked) {
+            rawSelected = false;
+            if (document.getElementById('Total').checked) {
+                displayTotalTrend();
+                undisplayTotal();
+            }
+            if (document.getElementById('Car').checked) {
+                displayCarTrend();
+                undisplayCar();
+            }
+            if (document.getElementById('Pedestrian').checked) {
+                displayPedTrend();
+                undisplayPedestrian();
+            }
+            if (document.getElementById('Motorcycle').checked) {
+                displayMotorTrend();
+                undisplayMotorcycle();
+            }
+            if (document.getElementById('Bicycle').checked) {
+                displayBicycleTrend();
+                undisplayBicycle();
+            }
+            if (document.getElementById('Truck').checked) {
+                displayTruckTrend();
+                undisplayTruck();
+            }
+        }
+    });
+
     /*
     If boolean for trendline is selected (all this logic is within teh filters), then plot trendline. Else, plot the raw data.
 
     */
+   
 
 
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Total Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     d3.select('#total').on('change', function () {
-        this.checked ? displayTotal() : undisplayTotal();
+        if (rawSelected) {
+            this.checked ? displayTotal() : undisplayTotal();
+        } else {
+            this.checked ? displayTotalTrend() : undisplayTotalTrend();
+        }
     });
 
+    //raw data
     function displayTotal() {
         var line = d3.line()
         .x(function (d, i) {
@@ -139,14 +208,38 @@ d3.csv('transportData.csv').then(function (data) {
         d3.selectAll('.total').remove();
     }
 
-    
+    //Trend data
+    function displayTotalTrend() {
+
+        var Gen = d3.line();
+        var points = [
+            [xscale(1975) + 100, yscale(48451.5) + 150],
+            [xscale(2020) + 100, yscale(34774.2) + 150]
+        ];
+        var pathOfLine = Gen(points);
+  
+        svg.append('path')
+            .attr('d', pathOfLine)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none')
+            .attr('class', 'totalTrend');
+    }
+
+    function undisplayTotalTrend() {
+        d3.selectAll('.totalTrend').remove();
+    }
 
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Car Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     d3.select('#car').on('change', function () {
-        this.checked ? displayCar() : undisplayCar();
+        if (rawSelected) {
+            this.checked ? displayCar() : undisplayCar();
+        } else {
+            this.checked ? displayCarTrend() : undisplayCarTrend();
+        }
     });
 
-
+    //raw data 
     function displayCar() {
         var line = d3.line()
         .x(function (d, i) {
@@ -154,7 +247,7 @@ d3.csv('transportData.csv').then(function (data) {
         })
         .y(function (d, i) {
             return yscale(carOccupant[i]) + 150;
-        });
+        }); 
 
         svg.append('path')
         .attr('d', line(carOccupant))
@@ -168,11 +261,40 @@ d3.csv('transportData.csv').then(function (data) {
         d3.selectAll('.car').remove();
     }
 
+    //Trend data
+    function displayCarTrend() {
+
+        var Gen = d3.line();
+        var points = [
+            [xscale(1975) + 100, yscale(35038.25) + 150],
+            [xscale(2020) + 100, yscale(23618.6) + 150]
+        ];
+        var pathOfLine = Gen(points);
+  
+        svg.append('path')
+            .attr('d', pathOfLine)
+            .attr('stroke', 'red')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none')
+            .attr('class', 'carTrend');
+    }
+
+    function undisplayCarTrend() {
+        d3.selectAll('.carTrend').remove();
+    }
+
+    
+
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Pedestrian Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     d3.select('#pedestrian').on('change', function () {
-        this.checked ? displayPedestrian() : undisplayPedestrian();
+        if (rawSelected) {
+            this.checked ? displayPedestrian() : undisplayPedestrian();
+        } else {
+            this.checked ? displayPedTrend() : undisplayPedTrend();
+        }
     });
 
+    //raw data
     function displayPedestrian() {
         var line = d3.line()
         .x(function (d, i) {
@@ -194,11 +316,38 @@ d3.csv('transportData.csv').then(function (data) {
         d3.selectAll('.pedestrian').remove();
     }
 
+    //Trend data
+    function displayPedTrend() {
+
+        var Gen = d3.line();
+        var points = [
+            [xscale(1975) + 100, yscale(7289.975) + 150],
+            [xscale(2020) + 100, yscale(4532.42) + 150]
+        ];
+        var pathOfLine = Gen(points);
+  
+        svg.append('path')
+            .attr('d', pathOfLine)
+            .attr('stroke', 'blue')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none')
+            .attr('class', 'pedTrend');
+    }
+
+    function undisplayPedTrend() {
+        d3.selectAll('.pedTrend').remove();
+    }
+
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Motorcycle Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     d3.select('#motorcycle').on('change', function () {
-        this.checked ? displayMotorcycle() : undisplayMotorcycle();
+        if (rawSelected) {
+            this.checked ? displayMotorcycle() : undisplayMotorcycle();
+        } else {
+            this.checked ? displayMotorTrend() : undisplayMotorTrend();
+        }
     });
 
+    //raw data
     function displayMotorcycle() {
         var line = d3.line()
         .x(function (d, i) {
@@ -220,11 +369,38 @@ d3.csv('transportData.csv').then(function (data) {
         d3.selectAll('.motorcycle').remove();
     }
 
+    //Trend data
+    function displayMotorTrend() {
+
+        var Gen = d3.line();
+        var points = [
+            [xscale(1975) + 100, yscale(3283.84) + 150],
+            [xscale(2020) + 100, yscale(4471.44) + 150]
+        ];
+        var pathOfLine = Gen(points);
+  
+        svg.append('path')
+            .attr('d', pathOfLine)
+            .attr('stroke', 'green')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none')
+            .attr('class', 'motorTrend');
+    }
+
+    function undisplayMotorTrend() {
+        d3.selectAll('.motorTrend').remove();
+    }
+
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Bicycle Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     d3.select('#bicycle').on('change', function () {
-        this.checked ? displayBicycle() : undisplayBicycle();
+        if (rawSelected) {
+            this.checked ? displayBicycle() : undisplayBicycle();
+        } else {
+            this.checked ? displayBicycleTrend() : undisplayBicycleTrend();
+        }
     });
 
+    //raw data
     function displayBicycle() {
         var line = d3.line()
         .x(function (d, i) {
@@ -246,9 +422,35 @@ d3.csv('transportData.csv').then(function (data) {
         d3.selectAll('.bicycle').remove();
     }
 
+    //Trend data
+    function displayBicycleTrend() {
+
+        var Gen = d3.line();
+        var points = [
+            [xscale(1975) + 100, yscale(918.909) + 150],
+            [xscale(2020) + 100, yscale(715.894) + 150]
+        ];
+        var pathOfLine = Gen(points);
+  
+        svg.append('path')
+            .attr('d', pathOfLine)
+            .attr('stroke', 'magenta')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none')
+            .attr('class', 'bicycleTrend');
+    }
+
+    function undisplayBicycleTrend() {
+        d3.selectAll('.bicycleTrend').remove();
+    }
+
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Truck Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     d3.select('#truck').on('change', function () {
-        this.checked ? displayTruck() : undisplayTruck();
+        if (rawSelected) {
+            this.checked ? displayTruck() : undisplayTruck();
+        } else {
+            this.checked ? displayTruckTrend() : undisplayTruckTrend();
+        }
     });
 
     function displayTruck() {
@@ -272,4 +474,25 @@ d3.csv('transportData.csv').then(function (data) {
         d3.selectAll('.truck').remove();
     }
 
+    //Trend data
+    function displayTruckTrend() {
+
+        var Gen = d3.line();
+        var points = [
+            [xscale(1975) + 100, yscale(1053.1) + 150],
+            [xscale(2020) + 100, yscale(496.72) + 150]
+        ];
+        var pathOfLine = Gen(points);
+  
+        svg.append('path')
+            .attr('d', pathOfLine)
+            .attr('stroke', 'orange')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none')
+            .attr('class', 'truckTrend');
+    }
+
+    function undisplayTruckTrend() {
+        d3.selectAll('.truckTrend').remove();
+    }
 });
