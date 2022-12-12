@@ -20,7 +20,7 @@ d3.csv('transportData.csv').then(function (data) {
         .attr('y', 50)
         .attr('text-anchor', 'middle')
         .attr('font-size', '30px')
-        .text('Transportation Fatalities over Time');
+        .text('Transportation Fatalities Over Time');
        
     // get the years of the data
     var years = data.map(function (row) {
