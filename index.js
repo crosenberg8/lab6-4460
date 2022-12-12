@@ -1,11 +1,4 @@
-d3.csv('transportData.csv').then(function (data) {
-    /*
-    1. Get the data into a varaible
-    2. Get the years of the data
-    3. Get the max and min number of fatalities
-    */
-    
-   
+d3.csv('transportData.csv').then(function (data) {   
 
    //select svg
    var svg = d3.select('svg')
@@ -14,7 +7,7 @@ d3.csv('transportData.csv').then(function (data) {
    var height = 700;
    var width = 1200;
 
-   // Title saying "Transportation Fatalities over Time"
+   // Title of the chart
     svg.append('text')
         .attr('x', width/2)
         .attr('y', 50)
@@ -22,7 +15,6 @@ d3.csv('transportData.csv').then(function (data) {
         .attr('font-size', '30px')
         .text('Transportation Fatalities Over Time');
        
-    // get the years of the data
     var years = data.map(function (row) {
         return row.Year;
     });
@@ -168,13 +160,7 @@ d3.csv('transportData.csv').then(function (data) {
                 undisplayTruck();
             }
         }
-    });
-
-    /*
-    If boolean for trendline is selected (all this logic is within teh filters), then plot trendline. Else, plot the raw data.
-
-    */
-   
+    });   
 
 
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Total Filter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
